@@ -1,4 +1,4 @@
-package org.norton.peterb.atm.model;
+package org.norton.peterb.atm.bean;
 
 import java.math.BigDecimal;
 

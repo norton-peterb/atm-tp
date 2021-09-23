@@ -1,5 +1,8 @@
 package org.norton.peterb.atm.store;
 
+import org.norton.peterb.atm.exception.InsufficientCashException;
+import org.norton.peterb.atm.exception.InvalidDenominationException;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -13,5 +16,18 @@ public interface IMachineCashStore {
      * @param amount Amount to request
      * @return Denominations Dispensed
      */
-    Map<BigDecimal,Integer> requestCash(BigDecimal amount);
+    Map<BigDecimal,Integer> requestCash(BigDecimal amount) throws InsufficientCashException,
+            InvalidDenominationException;
+
+    /**
+     * Return Cash to allocation for failed withdrawal
+     * @param cashMap Map Containing Denominations
+     */
+    void returnCash(Map<BigDecimal,Integer> cashMap);
+
+    /**
+     * Get the Total amount of cash in the store
+     * @return Total Cash stored
+     */
+    BigDecimal getStoreTotal();
 }
