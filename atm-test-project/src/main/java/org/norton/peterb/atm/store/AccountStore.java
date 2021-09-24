@@ -1,6 +1,7 @@
 package org.norton.peterb.atm.store;
 
 import org.norton.peterb.atm.bean.CustomerAccountBean;
+import org.norton.peterb.atm.exception.UnknownAccountException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +15,21 @@ public class AccountStore implements IAccountStore {
     }
 
     @Override
-    public CustomerAccountBean getAccount(String accountNumber) {
-        return customerAccountMap.get(accountNumber);
+    public CustomerAccountBean getAccount(String accountNumber) throws UnknownAccountException {
+        if(customerAccountMap.containsKey(accountNumber)) {
+            return customerAccountMap.get(accountNumber);
+        } else {
+            throw new UnknownAccountException("Account Number " + accountNumber + " not recognised");
+        }
     }
 
     @Override
-    public void updateAccount(CustomerAccountBean customerAccountBean) {
-        customerAccountMap.put(customerAccountBean.getAccountNumber(),customerAccountBean);
+    public void updateAccount(CustomerAccountBean customerAccountBean) throws UnknownAccountException {
+        if(customerAccountMap.containsKey(customerAccountBean.getAccountNumber())) {
+            customerAccountMap.put(customerAccountBean.getAccountNumber(), customerAccountBean);
+        } else {
+            throw new UnknownAccountException("Account Number " + customerAccountBean.getAccountNumber()
+                    + " not recognised");
+        }
     }
 }

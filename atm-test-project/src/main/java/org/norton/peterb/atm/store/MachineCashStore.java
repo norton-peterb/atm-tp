@@ -57,10 +57,10 @@ public class MachineCashStore implements IMachineCashStore {
             InvalidDenominationException  {
         // Check if the amount requested exceeds the store
         if(amount.compareTo(getStoreTotal()) > 0) {
-            throw new InsufficientCashException(amount,getStoreTotal());
+            throw new InsufficientCashException();
         }
         if(!checkDenominationValidity(amount)) {
-            throw new InvalidDenominationException("Unable to dispense value of " + amount.toString());
+            throw new InvalidDenominationException("Unable to dispense value of " + amount);
         }
         return computeAllocation(amount);
 
