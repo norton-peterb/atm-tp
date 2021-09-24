@@ -13,10 +13,13 @@ import org.norton.peterb.atm.store.IAccountStore;
 import org.norton.peterb.atm.store.IMachineCashStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
+@Component
 public class AccountActionProcessor implements IAccountActionProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountActionProcessor.class);
@@ -24,7 +27,8 @@ public class AccountActionProcessor implements IAccountActionProcessor {
     private final IAccountStore accountStore;
     private final IMachineCashStore machineCashStore;
 
-    public AccountActionProcessor(IAccountStore accountStore, IMachineCashStore machineCashStore) {
+    public AccountActionProcessor(@Autowired IAccountStore accountStore,
+                                  @Autowired IMachineCashStore machineCashStore) {
         this.accountStore = accountStore;
         this.machineCashStore = machineCashStore;
     }
