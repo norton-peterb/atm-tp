@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM openjdk:11
 WORKDIR /app
 COPY atm-test-project.jar /app/atm-test-project.jar
 COPY application.properties /app/application.properties
