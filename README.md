@@ -17,6 +17,7 @@ messages are included in the JSON response should these occur.
 Operation
 
 Application can be built using the included build.gradle by executing the bootJar task.
+NOTE: Gradle script is designed to run on Gradle 6.9 and is not yet compatible with Gradle 7
 This can then be run on the command line with the command:
 
 java -jar -DSERVER_PORT=8080 atm-test-project.jar
