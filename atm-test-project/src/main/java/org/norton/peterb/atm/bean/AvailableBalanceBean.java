@@ -2,6 +2,9 @@ package org.norton.peterb.atm.bean;
 
 import java.math.BigDecimal;
 
+/**
+ * Bean to represent a response from service with balance information
+ */
 public class AvailableBalanceBean {
     private final BigDecimal accountBalance;
     private final BigDecimal availableBalance;

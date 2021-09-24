@@ -2,12 +2,16 @@ package org.norton.peterb.atm.store;
 
 import org.norton.peterb.atm.exception.InsufficientCashException;
 import org.norton.peterb.atm.exception.InvalidDenominationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
 public class MachineCashStore implements IMachineCashStore {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MachineCashStore.class);
 
     private final Map<BigDecimal, Integer> cashStore = new HashMap<>();
     private final List<BigDecimal> denominationList = new ArrayList<>();
@@ -24,6 +28,10 @@ public class MachineCashStore implements IMachineCashStore {
         BigDecimal remainingAmount = amount;
         // Iterate through denominations largest first for smallest amount of notes
         for (BigDecimal denomination : denominationList) {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Allocating Denomination of {}€",denomination);
+                LOGGER.debug("Remaining Request to allocate is {}€",remainingAmount);
+            }
             // Determine number available from those in the store
             BigDecimal notesAvailable = remainingAmount.divide(denomination, RoundingMode.DOWN);
             // If notes from this denomination can be calculated perform operation
@@ -63,7 +71,6 @@ public class MachineCashStore implements IMachineCashStore {
             throw new InvalidDenominationException("Unable to dispense value of " + amount);
         }
         return computeAllocation(amount);
-
     }
 
     @Override
@@ -72,6 +79,10 @@ public class MachineCashStore implements IMachineCashStore {
         BigDecimal total = BigDecimal.ZERO;
         // Iterate through denominations in cash store adding each one
         for(Map.Entry<BigDecimal,Integer> cashDenomination : cashStore.entrySet()) {
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Store Denomination {}€ has {} note(s)",
+                        cashDenomination.getKey(),cashDenomination.getValue());
+            }
             total = total.add(
                     cashDenomination.getKey().multiply(BigDecimal.valueOf(cashDenomination.getValue()))
             );

@@ -50,6 +50,7 @@ public class AccountActionProcessor implements IAccountActionProcessor {
         CustomerAccountBean customerAccountBean = accountStore.getAccount(withdrawFundsRequest.getAccountNumber());
         BigDecimal availableFunds =
                 customerAccountBean.getAccountBalance().add(customerAccountBean.getOverdraftAmount());
+        // Check that amount requested is available in account
         if(withdrawFundsRequest.getAmount().compareTo(availableFunds) > 0) {
             throw new InsufficientFundsException();
         }
@@ -60,10 +61,13 @@ public class AccountActionProcessor implements IAccountActionProcessor {
                     (k,v) -> LOGGER.debug("Dispensing {} note(s) of value {}€",v,k)
             );
         }
+        // Determine new balance value to reapply to account
         BigDecimal newBalance = customerAccountBean.getAccountBalance()
                 .subtract(withdrawFundsRequest.getAmount());
         customerAccountBean.setAccountBalance(newBalance);
+        // Update Account in Store
         accountStore.updateAccount(customerAccountBean);
+        // Generate Response to Service
         BalanceQueryResponse balanceQueryResponse = new BalanceQueryResponse();
         balanceQueryResponse.setBalance(customerAccountBean.getAccountBalance());
         balanceQueryResponse.setAvailableBalance(
@@ -76,6 +80,7 @@ public class AccountActionProcessor implements IAccountActionProcessor {
     public BalanceQueryResponse checkBalance(BaseAccountRequest baseAccountRequest) throws ATMException {
         validatePin(baseAccountRequest);
         CustomerAccountBean customerAccountBean = accountStore.getAccount(baseAccountRequest.getAccountNumber());
+        // Generate Response with Bean from Store
         BalanceQueryResponse balanceQueryResponse = new BalanceQueryResponse();
         balanceQueryResponse.setBalance(customerAccountBean.getAccountBalance());
         balanceQueryResponse.setAvailableBalance(customerAccountBean.getAccountBalance()
